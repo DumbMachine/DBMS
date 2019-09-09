@@ -1,0 +1,41 @@
+REtrive the name of employees who are earning second highest salary.
++--------+-----------+--------
+SELECT max(salary)
+FROM EMPLOYEE
+WHERE salary < (SELECT max(salary)
+                FROM EMPLOYEE);
++--------+-----------+--------
+
+Shows the list of employess working on all the projects.
++--------+-----------+--------
+MariaDB [Company]> SELECT E.fname from EMPLOYEE E, WORKS_ON W where W.pno =  ALL( SELECT DISTINCT(pno) from WORKS_ON) and E.ssn = W.essn;
++--------+-----------+--------
+
+List the pair of employee and dependent of same gender.
++--------+-----------+--------
+MariaDB [Company]> SELECT E.fname,D.dependent_name from EMPLOYEE E, DEPENDENT D where ( E.ssn = D.essn and E.sex=D.sex);
++--------+-----------+--------
+
+
+List the ,who works on the same dept and projet.
++--------+-----------+--------
+MariaDB [Company]> SELECT fname, dno from EMPLOYEE where dno in ( SELECT dno from EMPLOYEE GROUP BY dno);
++--------+-----------+--------
+
+Retrive the employee details who are manager and supervised atleast two employess.
++--------+-----------+--------
+MariaDB [Company]> SELECT fname, superssn, count(*) from EMPLOYEE 
+    -> GROUP BY superssn
+    -> HAVING count(*) > 2;
++--------+-----------+--------
+
+
+PRovide the list of male emps on each department who are earning more than 20000.
++--------+-----------+--------
+MariaDB [Company]> SELECT fname, sex, salary, dno from EMPLOYEE where sex='M' and salary > 20000 order by dno;	
++--------+-----------+--------
+
+TOTAL nos of emp for each gender, who are wokring more than 2 projects and more than 20 hours on each.
++--------+-----------+--------
+MariaDB [Company]> SELECT E.fname  from EMPLOYEE E where E.ssn in  ( SELECT essn from WORKS_ON group by essn having COUNT(*) > 1 and sum(hours) > 39 );
++--------+-----------+--------
