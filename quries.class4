@@ -37,6 +37,11 @@ MariaDB [Company]> SELECT fname, sex, salary, dno from EMPLOYEE where sex='M' an
 
 TOTAL nos of emp for each gender, who are wokring more than 2 projects and more than 20 hours on each.
 +--------+-----------+--------
-MariaDB [Company]> SELECT count(*), sex from EMPLOYEE E where E.ssn in  ( SELECT essn from WORKS_ON group by pno having COUNT(*) > 1 and sum(hours) >= 40 ) order by sex;
+MariaDB [Company]> SELECT count(*), sex from EMPLOYEE E where E.ssn in  ( SELECT essn from WORKS_ON where hours>20 group by pno having COUNT(*) > 2) order by sex;
+
 
 +--------+-----------+--------
+
+
+
+MariaDB [Company]> SELECT E.ssn, F.ssn from EMPLOYEE E, EMPLOYEE F, WORKS_ON W  where E.superssn = F.ssn and E.dno = F.dno and where E.ssn = ANY( SELECT essn from WORKS_ON where E.ssn = pno and F.ssn = pno);
